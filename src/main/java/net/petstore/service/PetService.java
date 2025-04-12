@@ -2,9 +2,7 @@ package net.petstore.service;
 
 import net.petstore.model.ModelApiResponse;
 import net.petstore.model.Pet;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 public interface PetService {
     
@@ -18,6 +16,6 @@ public interface PetService {
                            String name,
                            String status);
 
-    ModelApiResponse uploadFile(Long petId, String additionalMetadata, MultipartFile file);
+    ModelApiResponse uploadFile(Long petId, String additionalMetadata, String content);
 }
 

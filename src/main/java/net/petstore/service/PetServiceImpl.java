@@ -4,16 +4,12 @@ package net.petstore.service;
 import lombok.extern.slf4j.Slf4j;
 import net.petstore.model.ModelApiResponse;
 import net.petstore.model.Pet;
-import net.petstore.repository.CustomPetRepository;
+
 import net.petstore.repository.PetRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -22,8 +18,6 @@ public class PetServiceImpl implements PetService {
     @Autowired
     PetRepository petRepository;
 
-    @Autowired
-    CustomPetRepository customPetRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -61,7 +55,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public ModelApiResponse uploadFile(Long petId, String additionalMetadata, MultipartFile file) {
+    public ModelApiResponse uploadFile(Long petId, String additionalMetadata, String content) {
         throw new java.lang.UnsupportedOperationException("Not supported yet.");
     }
 

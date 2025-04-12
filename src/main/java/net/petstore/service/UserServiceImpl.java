@@ -26,6 +26,16 @@ public class UserServiceImpl implements  UserService{
 
     }
 
+    @Override
+    public void createUsersWithArrayInput(List<User> body) {
+        throw new java.lang.UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void createUsersWithListInput(List<User> body) {
+        throw new java.lang.UnsupportedOperationException("Not supported yet.");
+    }
+
 
     public void deleteUser( String username) {
         //  find the user by username and delete it
