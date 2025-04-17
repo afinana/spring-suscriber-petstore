@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 
 @Slf4j
-public class UserConsumer {
+public class UserEventConsumer {
 
 
     @Autowired
