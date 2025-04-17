@@ -20,7 +20,7 @@ jobs:
       REGISTRY: docker.io
       # github.repository as <account>/<repo>
       USER_ACCOUNT: middleland
-      IMAGE_NAME: spring-server-petstore
+      IMAGE_NAME: spring-suscriber-petstore
       TAG_NAME: redis
       
     permissions:
