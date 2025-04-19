@@ -18,9 +18,8 @@ public class PetServiceImpl implements PetService {
     @Autowired
     PetRepository petRepository;
 
-
     @Autowired
-    ModelMapper modelMapper;
+    ModelMapper modelMapper ;
 
 
     @Override

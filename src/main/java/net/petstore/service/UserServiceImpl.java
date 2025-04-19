@@ -15,7 +15,7 @@ public class UserServiceImpl implements  UserService{
     UserRepository userRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    ModelMapper modelMapper;
 
 
     public void createUser(User body) {
