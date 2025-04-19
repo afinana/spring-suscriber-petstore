@@ -2,68 +2,42 @@ package net.petstore.consumer;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.petstore.model.Pet;
 import net.petstore.service.PetService;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class PetEventConsumer {
 
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Autowired
-    private PetService service;
+    private PetService petService;
+    private final ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "pet-topic", groupId = "pet-group")
-    public void consumePetEvent(ConsumerRecord<String, String> record) {
-        String key = record.key();
-        String value = record.value();
-        log.info("Received message from Kafka:{ key:{}, value:{} }", key, value);
-
+    @RabbitListener(queues = "petstore-pets-add-queue")
+    public void handleAddPet(String petJson) {
         try {
-            switch (key) {
-                case "CREATE":
-                    Pet createdPet = objectMapper.readValue(value, Pet.class);
-                    handleCreate(createdPet);
-                    break;
-                case "UPDATE":
-                    Pet updatedPet = objectMapper.readValue(value, Pet.class);
-                    handleUpdate(updatedPet);
-                    break;
-                case "DELETE":
-                    Long deletedPetId = Long.parseLong(value);
-                    handleDelete(deletedPetId);
-                    break;
-                default:
-                    log.warn("Unknown key: " + key);
-            }
+            Pet pet = objectMapper.readValue(petJson, Pet.class);
+            petService.addPet(pet); // Assumes Pet is a JPA entity or mapped appropriately
+            log.info("Consumed and saved pet: {}", pet);
         } catch (Exception e) {
-            log.error("Error processing pet event: " + e.getMessage());
+            log.error("Failed to consume addPet message", e);
         }
     }
 
-    private void handleCreate(Pet pet) {
-        // Logic to handle pet creation
-        log.info("Handling CREATE for pet: " + pet);
-        service.addPet(pet);
-    }
-
-    private void handleUpdate(Pet pet) {
-        // Logic to handle pet update
-        log.info("Handling UPDATE for pet: {}", pet);
-        service.updatePet(pet);
-    }
-
-    private void handleDelete(Long petId) {
-        // Logic to handle pet deletion
-        log.info("Handling DELETE for pet ID: {}", petId);
-        service.deletePet(petId);
+    @RabbitListener(queues = "petstore-pets-delete-queue")
+    public void handleDeletePet(Long petId) {
+        try {
+            petService.deletePet(petId);
+            log.info("Consumed and deleted pet with ID: {}", petId);
+        } catch (Exception e) {
+            log.error("Failed to consume deletePet message", e);
+        }
     }
 }
-

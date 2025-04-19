@@ -2,12 +2,12 @@ package net.petstore.consumer;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 @Slf4j
 public class StoreEventConsumer {
 
-    @KafkaListener(topics = "pet-topic", groupId = "pet-consumer-group")
+    @RabbitListener(queues = "petstore-store-add-queue")
     public void consume(String message) {
         try {
             log.info("Received message from Kafka: {}", message);
